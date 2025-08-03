@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 final formatter = DateFormat.yMd();
 
-final uuid = Uuid();
+final uuid = Uuid(); //this class used to generate unique ids
 
 enum Category { food, travel, leisure, work }
 
@@ -26,10 +26,35 @@ class Expense {
   final String id;
   final String title;
   final double amount;
-  final DateTime date;
+  final DateTime date; // DateTime is a data type, allow us to store date info
   final Category category;
 
   String get formattedDate {
     return formatter.format(date);
+  }
+}
+//it describe what kind of data structure an expense in this app should have
+
+class ExpenseBucket {
+  const ExpenseBucket({
+    required this.category,
+    required this.expenses,
+  });
+
+  ExpenseBucket.forCategory(List<Expense> allExpenses, this.category)
+      : expenses = allExpenses
+            .where((expense) => expense.category == category)
+            .toList();
+
+  final Category category;
+  final List<Expense> expenses;
+
+  double get totalExpenses {
+    double sum = 0;
+
+    for (final expense in expenses) {
+      sum = sum + expense.amount;
+    }
+    return sum;
   }
 }
